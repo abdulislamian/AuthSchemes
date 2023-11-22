@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AuthSchemesAndOptions</name>
+    </assembly>
+    <members>
+        <member name="M:AuthSchemesAndOptions.Controllers.AuthController.Register(AuthSchemesAndOptions.Models.DTO.RegisterRequestDTO)">
+            <summary>
+            Create New User (Only Accessed by Admin)
+            </summary>
+            <returns>Return Newly Created User</returns>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.AuthController.LoginDefaultJwt(AuthSchemesAndOptions.Models.DTO.LoginRequestDTO)">
+            <summary>
+            Login With DefaultJWT
+            </summary>
+            <returns>Return Token by DefaultJWT</returns>
+            <response code="200">Returns JWT Token</response>
+            <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.AuthController.LoginSecondJwt(AuthSchemesAndOptions.Models.User)">
+            <summary>
+            Login With SecondJWT
+            </summary>
+            <returns>Return Token by SecondJWT</returns>
+            <response code="200">Returns SecondJWT Token</response>
+            <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.AuthController.LoginCookie(AuthSchemesAndOptions.Models.DTO.LoginRequestDTO)">
+            <summary>
+            Login With Cookie
+            </summary>
+            <returns>Return Cookie by Login</returns>
+            <response code="200">Returns Cookie in Browser</response>
+            <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.ContentController.GetWithCookie">
+             <summary>
+             Access with Only Cookie Authentication
+             </summary>
+             <returns>Return Data with Cookie Authentication</returns>
+            <response code="200">Successful Response for Authorized User</response>
+             <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.StudentController.GetAll">
+             <summary>
+             Gets the list of all students
+             </summary>
+             <returns>The students list</returns>
+            <response code="200">Successful Response for Authorized User</response>
+             <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.StudentController.Create(AuthSchemesAndOptions.Models.DTO.AddStudentRequestDto)">
+            <summary>
+            Create New student
+            </summary>
+            <returns>Return New Created Student</returns>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.StudentController.GetWithJWT">
+            <summary>
+            Get Data with First Default JWT
+            </summary>
+            <returns>Return First Default JWT</returns>
+            <response code="200">Successful Response for Authorized User</response>
+            <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.StudentController.GetWithAny">
+            <summary>
+            Get Data with Any Authentication Schemes
+            </summary>
+            <returns>Return Data with Any Authentication Schemes</returns>
+            <response code="200">Successful Response for Authorized User</response>
+            <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="M:AuthSchemesAndOptions.Controllers.StudentController.GetWithSecondJwt">
+            <summary>
+            Get Data with SecondJWT Authentication Schemes
+            </summary>
+            <returns>Return Data with SecondJWT Authentication Schemes</returns>
+            <response code="200">Successful Response for Authorized User</response>
+            <response code="401">UnAuthorized Access</response>
+        </member>
+        <member name="T:AuthSchemesAndOptions.Migrations.InitialMigration">
+            <inheritdoc />
+        </member>
+        <member name="M:AuthSchemesAndOptions.Migrations.InitialMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AuthSchemesAndOptions.Migrations.InitialMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AuthSchemesAndOptions.Migrations.InitialMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

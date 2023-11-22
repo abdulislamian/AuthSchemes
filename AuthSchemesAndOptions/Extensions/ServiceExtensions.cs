@@ -1,12 +1,11 @@
-﻿using AuthSchemesAndOptions.Models;
-using Azure.Core;
-using JWTAuthentication.Data;
+﻿using JWTAuthentication.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -116,6 +115,46 @@ namespace AuthSchemesAndOptions.Extensions
 
 
             });
+        }
+        public static void ConfigureSwaggerGen(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(options => {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth Scheme Task -  API", Version = "v1" });
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "Students.Presentation.xml");
+                options.IncludeXmlComments(filePath);
+
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference =new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id   = JwtBearerDefaults.AuthenticationScheme
+                            },
+                            Scheme = "Oauth2",
+                            Name   = JwtBearerDefaults.AuthenticationScheme,
+                            In     = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
+            });
+        }
+        public static void AddJwtConfiguration(this IServiceCollection services, IConfiguration
+        configuration)
+        {
+            services.Configure<JwtConfiguration>(configuration.GetSection("JWT"));
+            //we use for mutilple configuration with same property
+            services.Configure<JwtConfiguration>("JwtConfig", configuration.GetSection("JWT"));
         }
     }
 }

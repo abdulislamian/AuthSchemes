@@ -38,9 +38,15 @@ namespace AuthSchemesAndOptions.Controllers
 
         #region RegisterUser
         //POST :  /api/Auth/Register
+        /// <summary>
+        /// Create New User (Only Accessed by Admin)
+        /// </summary>
+        /// <returns>Return Newly Created User</returns>
         [HttpPost]
         [Route("Register")]
         [Authorize(policy: "OnlyAdmin")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
         {
             var identityUser = new IdentityUser
@@ -78,8 +84,16 @@ namespace AuthSchemesAndOptions.Controllers
         }
         #endregion
 
+        /// <summary>
+        /// Login With DefaultJWT
+        /// </summary>
+        /// <returns>Return Token by DefaultJWT</returns>
+        /// <response code="200">Returns JWT Token</response>
+        /// <response code="401">UnAuthorized Access</response>
         #region Login
         [HttpPost("loginDefaultJwt")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> LoginDefaultJwt([FromBody] LoginRequestDTO loginRequestDTO)
         {
             var IsUserExist = await _userManager.FindByEmailAsync(loginRequestDTO.Username);
@@ -112,7 +126,15 @@ namespace AuthSchemesAndOptions.Controllers
             return BadRequest("Username or Password is incorrect.");
         }
 
+        /// <summary>
+        /// Login With SecondJWT
+        /// </summary>
+        /// <returns>Return Token by SecondJWT</returns>
+        /// <response code="200">Returns SecondJWT Token</response>
+        /// <response code="401">UnAuthorized Access</response>
         [HttpPost("loginSecondJwt")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public IActionResult LoginSecondJwt([FromBody] User user)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@2"));
@@ -131,7 +153,15 @@ namespace AuthSchemesAndOptions.Controllers
             return Ok(new { Token = tokenString });
         }
 
+        /// <summary>
+        /// Login With Cookie
+        /// </summary>
+        /// <returns>Return Cookie by Login</returns>
+        /// <response code="200">Returns Cookie in Browser</response>
+        /// <response code="401">UnAuthorized Access</response>
         [HttpPost("loginCookie")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> LoginCookie([FromBody] LoginRequestDTO loginRequestDTO)
         {
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);

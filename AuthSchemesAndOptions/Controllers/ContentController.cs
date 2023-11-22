@@ -9,6 +9,12 @@ namespace AuthSchemesAndOptions.Controllers
     [Route("api/[controller]")]
     public class ContentController : ControllerBase
     {
+        /// <summary>
+        /// Access with Only Cookie Authentication
+        /// </summary>
+        /// <returns>Return Data with Cookie Authentication</returns>
+        ///<response code="200">Successful Response for Authorized User</response>
+        /// <response code="401">UnAuthorized Access</response>
         [Authorize(Policy = "OnlyCookieScheme")]
         [HttpGet("getWithCookie")]
         public IActionResult GetWithCookie()

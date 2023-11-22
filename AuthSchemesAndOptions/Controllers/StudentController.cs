@@ -34,6 +34,12 @@ namespace AuthSchemesAndOptions.Controllers
         }
 
         #region GellAllStudent
+        /// <summary>
+        /// Gets the list of all students
+        /// </summary>
+        /// <returns>The students list</returns>
+        ///<response code="200">Successful Response for Authorized User</response>
+        /// <response code="401">UnAuthorized Access</response>
         [HttpGet]
         [Authorize(Policy = "AllUser")]
         public async Task<IActionResult> GetAll()
@@ -49,6 +55,10 @@ namespace AuthSchemesAndOptions.Controllers
 
         #region CreateStudent
         //POST
+        /// <summary>
+        /// Create New student
+        /// </summary>
+        /// <returns>Return New Created Student</returns>
         [HttpPost]
         //[ValidateModel]
         [Authorize(Policy = "OnlyAdmin")]
@@ -65,12 +75,26 @@ namespace AuthSchemesAndOptions.Controllers
             return Ok(studentDTO);
         }
         #endregion
+
+        /// <summary>
+        /// Get Data with First Default JWT
+        /// </summary>
+        /// <returns>Return First Default JWT</returns>
+        /// <response code="200">Successful Response for Authorized User</response>
+        /// <response code="401">UnAuthorized Access</response>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] // Use default JWT scheme
         [HttpGet("getWithJWT")]
         public IActionResult GetWithJWT()
         {
             return Ok(new { Message = $"Hello to Code Maze {GetUsername()} - Only JWT Method" });
         }
+
+        /// <summary>
+        /// Get Data with Any Authentication Schemes
+        /// </summary>
+        /// <returns>Return Data with Any Authentication Schemes</returns>
+        /// <response code="200">Successful Response for Authorized User</response>
+        /// <response code="401">UnAuthorized Access</response>
         [Authorize]
         [HttpGet("getWithAny")]
         public IActionResult GetWithAny()
@@ -78,6 +102,13 @@ namespace AuthSchemesAndOptions.Controllers
             return Ok(new { Message = $"Hello to Code Maze {GetUsername()} - Access by Any Scheme" });
         }
         //[Authorize(Policy = "OnlySecondJwtScheme")]
+
+        /// <summary>
+        /// Get Data with SecondJWT Authentication Schemes
+        /// </summary>
+        /// <returns>Return Data with SecondJWT Authentication Schemes</returns>
+        /// <response code="200">Successful Response for Authorized User</response>
+        /// <response code="401">UnAuthorized Access</response>
         [Authorize(AuthenticationSchemes = "SecondJwtScheme")]
         [HttpGet("getWithSecondJwt")]
         public IActionResult GetWithSecondJwt()

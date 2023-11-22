@@ -4,6 +4,7 @@ using JWTAuthentication.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,17 +16,24 @@ namespace AuthSchemesAndOptions.Repositories
     {
         private readonly ApplicationDbContext dbContext;
         private readonly UserManager<IdentityUser> userManager;
-        private readonly IHttpContextAccessor context;
         private readonly IConfiguration _configuration;
+
+        private readonly IOptionsMonitor<JwtConfiguration> _JWToptionsMonitor;
+        private readonly JwtConfiguration jWTConfig;
         private readonly JwtConfiguration _Jwtconfiguration;
 
         public TokenRepository(ApplicationDbContext _dbContext,
-            UserManager<IdentityUser> _userManager,IHttpContextAccessor _context,IConfiguration configuration)
+            UserManager<IdentityUser> _userManager,IConfiguration configuration,
+            IOptionsSnapshot<JwtConfiguration> _JWTSnapshotConfig,
+            IOptionsMonitor<JwtConfiguration> JWTMonitorConfig)
         {
             dbContext = _dbContext;
             userManager = _userManager;
-            context = _context;
+
             _configuration = configuration;
+            _JWToptionsMonitor = JWTMonitorConfig;
+            jWTConfig = _JWTSnapshotConfig.Value;
+
             _Jwtconfiguration = new JwtConfiguration();
             _configuration.Bind(_Jwtconfiguration.Section, _Jwtconfiguration);
         }
@@ -41,12 +49,16 @@ namespace AuthSchemesAndOptions.Repositories
             }
 
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Jwtconfiguration.Key));
-
             var credentials = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+            
+            var JWTMonConfig = _JWToptionsMonitor.CurrentValue;
+            var JWTMonConfig2 = _JWToptionsMonitor.Get("JwtConfig");
+
 
             var Token = new JwtSecurityToken(
-                _Jwtconfiguration.Issuer,
-                _Jwtconfiguration.Audience,
+                jWTConfig.Issuer,
+                //_Jwtconfiguration.Audience,
+                JWTMonConfig.Audience,
                 claims,
                 expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: credentials
